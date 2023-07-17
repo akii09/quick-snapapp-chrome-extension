@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Uploaded</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+
+    .editor-container {
+      max-width: 100%;
+      margin: 0 20%;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .editor-image {
+      display: block;
+      max-width: 100%;
+      margin-bottom: 20px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .quick-image-prv{
+      width: 100%;
+    }
+
+    .editor-tools {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .editor-tools {
+      display: flex;
+      flex-direction: column;
+    }
+    .editor-item{
+      margin-top: 10px;
+    }
+    .editor-input{
+      width: 250px;
+      padding: 10px 15px;
+      border-radius: 9px;
+      border: 2px solid #a99716;
+    }
+    .editor-btn{
+      padding: 9px 18px;
+      border-radius: 32px;
+      border: none;
+      background: #a99716;
+      cursor: pointer;
+    }
+    #saveBtn{
+      margin-left: 15px;
+    }
+    .delete-btn{
+      background-color: rgb(222, 94, 94) !important;
+      color: white !important;
+    }
+  </style>
+  <script src="../src/fabric.min.js"></script>
+</head>
+<body>
+  <div class="editor-container">
+    <h1 style="text-align: center;">Mission accomplished! Your image is uploaded and ready for action.</h1>
+    <div class="editor-image" id="canvasContainer"></div>
+    <div class="editor-tools">
+      <!-- Add more tools buttons as needed -->
+      <span id="copyAnswer"></span>
+      <input id="urlInp" class="editor-item editor-input" type="text" disabled value="ll">
+      <div style="display: flex; align-items: center;">
+        <button class="editor-item editor-btn" id="copyUrl">Copy URL</button>
+        <button class="editor-item editor-btn delete-btn" id="deleteBtn">Delete Image</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- <script src="../src/toastify.min.js"></script> -->
+  <script src="../src/editor.js"></script>
+  <script src="../src/uploadProcess.js"></script>
+  <script src="../src/deleteProcess.js"></script>
+</body>
+</html>
