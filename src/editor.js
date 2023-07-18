@@ -1,6 +1,5 @@
 // Disable page reload prompt
 chrome.storage.local.get(["image"]).then((result) => {
-    // console.log("Value currently is " + result.image);
     if (result.image) {
         const image = new Image();
         image.className = 'quick-image-prv';
