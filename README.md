@@ -37,7 +37,7 @@ To configure the extension settings:
 
 ## Support
 
-For any issues, questions, or feedback, please feel free to contact our support team at support@QuickSnap.com.
+For any issues, questions, or feedback, please feel free to contact our support team at support@akashpise.tech.
 
 ## License
 
