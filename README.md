@@ -35,9 +35,6 @@ To configure the extension settings:
 3. Enter the required API keys, watermarks, or any other necessary details.
 4. Save the settings by clicking on the "Save" button.
 
-## Support
-
-For any issues, questions, or feedback, please feel free to contact our support team at support@akashpise.tech.
 
 ## License
 
