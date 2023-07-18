@@ -13,9 +13,6 @@ function uploadImage(imgData) {
 }
 
 function processUploading(imgData) {
-    // Replace 'YOUR_CLIENT_ID' with your actual Imgur API client ID
-    // const clientId = '2aa42594970b8f4';
-
     // Create a file input element dynamically
     var file = dataURLtoFile(imgData.image, "screenshot.jpg");
 
