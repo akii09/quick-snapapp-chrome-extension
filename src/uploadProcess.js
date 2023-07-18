@@ -1,7 +1,6 @@
-
-
-
 function uploadImage(imgData) {
+    processUploading(imgData);
+    return;
     chrome.storage.local.get(["image"]).then((result) => {
         if (result.image === imgData.image) {
             chrome.storage.local.get(["url"]).then((img) => {
@@ -9,38 +8,45 @@ function uploadImage(imgData) {
                 setToInputField(img.url)
             });
         } else {
-            processUploading(imgData);
         }
     });
 }
 
 function processUploading(imgData) {
     // Replace 'YOUR_CLIENT_ID' with your actual Imgur API client ID
-    const clientId = '2aa42594970b8f4';
+    // const clientId = '2aa42594970b8f4';
 
     // Create a file input element dynamically
     var file = dataURLtoFile(imgData.image, "screenshot.jpg");
 
     console.log(file, 'file')
     if (file) {
-        uploadToImgur(file, clientId);
+        uploadToImgur(file);
     }
 }
 
-function uploadToImgur(file, clientId) {
-    console.log(file, clientId, 'file, clientId')
+async function uploadToImgur(file) {
     const formData = new FormData();
     formData.append('image', file);
-
-    fetch('https://api.imgur.com/3/image', {
-        method: 'POST',
-        headers: {
-            Authorization: `Client-ID ${clientId}`,
-        },
-        body: formData,
-    })
-        .then(response => response.json())
-        .then(data => {
+    // Get API Key
+    let apiKey;
+    let clientId;
+    chrome.storage.sync.get(["apiKey", "clientID"]).then((result) => {
+        if(result.apiKey && result.clientID){
+            apiKey = result.apiKey;
+            clientId = result.clientID;
+        } else {
+            chrome.runtime.openOptionsPage();
+            return;
+        }
+    }).then(()=>{
+        fetch(apiKey, {
+            method: 'POST',
+            headers: {
+                Authorization: `Client-ID ${clientId}`,
+            },
+            body: formData,
+        }).then(response => response.json()).then(data => {
             const imageUrl = data.data.link;
             setToInputField(imageUrl);
             chrome.storage.local.set({ url: imageUrl }).then(() => {
@@ -61,9 +67,10 @@ function uploadToImgur(file, clientId) {
                 console.log('Image upload failed.');
             }
         })
-        .catch(error => {
-            console.error('Error uploading image:', error);
-        });
+            .catch(error => {
+                console.error('Error uploading image:', error);
+            });
+    });
 }
 
 

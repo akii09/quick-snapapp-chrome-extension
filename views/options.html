@@ -1,17 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Screenshot Extension Settings</title>
+  <title>QuickSnap Extension Settings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1f1f1f;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 98vh;
+    }
+
+    .container {
+      width: 400px;
+      padding: 30px;
+      background-color: #333;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    h3 {
+      font-size: 15px;
+      text-align: center;
+      margin-bottom: 20px;
+      margin-top: 1px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      background-color: #555;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+    .qs-header{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qs-header h1{
+      margin-left: 5px;
+    }
+  </style>
   <script src="../src/options.js"></script>
 </head>
 <body>
-  <h2>Extension Settings</h2>
-  <label for="apiKey">API Key:</label>
-  <input type="text" id="apiKey"><br>
-  <label for="watermark">Watermark:</label>
-  <input type="text" id="watermark"><br>
-  <label for="secretKey">Secret Key:</label>
-  <input type="password" id="secretKey"><br>
-  <button id="saveBtn">Save</button>
+  <div class="container">
+    <div class="qs-header">
+      <img width="28px" src="../images/screenshot.png" alt="Q" srcset="">
+      <h1> QuickSnap </h1>
+    </div>
+    <h3>Extension Settings</h3>
+    <label for="apiKey">API Key:</label>
+    <input type="text" id="apiKey" placeholder="Enter your API key">
+    <label for="watermark">Watermark:</label>
+    <input type="text" id="watermark" placeholder="Enter your watermark">
+    <label for="clientID">Client ID:</label>
+    <input type="password" id="clientID" placeholder="Enter your client id">
+    <button id="saveBtn">Update</button>
+  </div>
 </body>
 </html>

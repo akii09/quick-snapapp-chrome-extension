@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function loadSettings() {
     // Get the stored settings and populate the input fields
-    chrome.storage.sync.get(['apiKey', 'watermark', 'secretKey'], function(items) {
+    chrome.storage.sync.get(['apiKey', 'watermark', 'clientID'], function(items) {
       document.getElementById('apiKey').value = items.apiKey || '';
       document.getElementById('watermark').value = items.watermark || '';
-      document.getElementById('secretKey').value = items.secretKey || '';
+      document.getElementById('clientID').value = items.clientID || '';
     });
   }
   
@@ -17,15 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get the input values
     var apiKey = document.getElementById('apiKey').value;
     var watermark = document.getElementById('watermark').value;
-    var secretKey = document.getElementById('secretKey').value;
+    var clientID = document.getElementById('clientID').value;
   
     // Save the settings to storage
     chrome.storage.sync.set({
       'apiKey': apiKey,
       'watermark': watermark,
-      'secretKey': secretKey
+      'clientID': clientID
     }, function() {
-      console.log('Settings saved');
+      alert('Settings saved');
     });
   }
   

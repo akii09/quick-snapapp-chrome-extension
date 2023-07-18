@@ -12,12 +12,12 @@ function openOptionsPage() {
 }
 
 function captureScreenshot() {
-  chrome.storage.local.remove(["image"],function(){
-    var error = chrome.runtime.lastError;
-       if (error) {
-           console.error(error);
-       }
-   })
+  chrome.storage.local.remove(["image", 'url'],function(){
+  var error = chrome.runtime.lastError;
+      if (error) {
+          console.error(error);
+      }
+  })
 
   chrome.tabs.captureVisibleTab(null, { format: 'png' }, function(dataUrl) {
     openEditorPage(dataUrl);

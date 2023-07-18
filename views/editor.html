@@ -54,6 +54,7 @@
       border: none;
       background: #a99716;
       cursor: pointer;
+      margin: 10px 5px;
     }
     #saveBtn{
       margin-left: 15px;
@@ -67,12 +68,12 @@
 </head>
 <body>
   <div class="editor-container">
-    <h1 style="text-align: center;">Mission accomplished! Your image is uploaded and ready for action.</h1>
+    <h1 id="qs-heading" style="text-align: center;">Mission accomplished! Your image is uploaded and ready for action.</h1>
     <div class="editor-image" id="canvasContainer"></div>
-    <div class="editor-tools">
+    <div id="editor-tools-sec" class="editor-tools">
       <!-- Add more tools buttons as needed -->
       <span id="copyAnswer"></span>
-      <input id="urlInp" class="editor-item editor-input" type="text" disabled value="ll">
+      <input id="urlInp" class="editor-item editor-input" type="text" disabled value="Loading...">
       <div style="display: flex; align-items: center;">
         <button class="editor-item editor-btn" id="copyUrl">Copy URL</button>
         <button class="editor-item editor-btn delete-btn" id="deleteBtn">Delete Image</button>

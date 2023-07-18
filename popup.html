@@ -10,11 +10,52 @@
       right: 10px;
       cursor: pointer;
     }
+    .qs-footer{
+      display: flex;
+      align-items: center;
+    }
+    .qs-sec{
+      width: 350px;
+    }
+    .qs-center{
+      padding: 15px 0;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      /* align-items: center; */
+    }
+    .qs-header{
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-bottom: 1px solid #dad7d7;
+    }
+    .qs-header h1{
+      font-size: 22px;
+      margin-left: 5px;
+      color: #80B4FB;
+      -webkit-text-stroke: 0.7px black;
+    }
   </style>
 </head>
 <body>
-  <button id="captureBtn">Capture Screenshot</button>
-  <button id="settingsIcon">Settings</button>
-  <!-- <img id="settingsIcon" src="settings.png" alt="Settings Icon"> -->
+ <div class="qs-sec">
+   <div id="qsLogo" class="qs-header">
+     <img width="28px" src="./images/screenshot.png" alt="Q" srcset="">
+    <h1> QuickSnap </h1>
+  </div>
+ <div class="qs-center">
+  <!-- <button id="captureBtn">Capture Screenshot</button> -->
+  <img width=75px" id="captureBtn" style="margin: 5px; cursor: pointer;" src="./images/capture.png" alt="settings" srcset="">
+  <!-- <img width="75px" id="selectBtn" style="margin: 5px; cursor: pointer;" src="./images/expand.png" alt="crop" srcset=""> -->
+  <!-- <button id="settingsIcon">Settings</button> -->
+ </div>
+  <div class="qs-footer">
+    <img width="25px" id="settingsIcon" style="margin: 5px; cursor: pointer;" src="./images/gear.png" alt="settings" srcset="">
+    <!-- <img width="25px" style="margin: 5px; cursor: pointer;" src="./images/expand.png" alt="crop" srcset=""> -->
+  </div>
+ </div>
 </body>
 </html>
