@@ -1,6 +1,6 @@
 {
     "name": "Quick Snap App",
-    "description": "A simple app to take a picture and save it to the cloud.",
+    "description": "A simple app to take a picture and save it to the cloud. Credits (https://imgur.com)",
     "version": "1.0",
     "manifest_version": 3,
     "background": {

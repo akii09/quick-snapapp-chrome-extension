@@ -35,6 +35,10 @@ To configure the extension settings:
 3. Enter the required API keys, watermarks, or any other necessary details.
 4. Save the settings by clicking on the "Save" button.
 
+## Credits
+- imgur.com/ -- For Clod integration
+- flaticon.com -- For icons
+
 
 ## License
 
