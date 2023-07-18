@@ -20,8 +20,47 @@ function captureScreenshot() {
   })
 
   chrome.tabs.captureVisibleTab(null, { format: 'png' }, function(dataUrl) {
-    openEditorPage(dataUrl);
+    // openEditorPage(dataUrl);
+    chrome.storage.sync.get(["watermark"]).then((result) => {
+      let printWM = 'QuickSnap';
+      if(result.watermark){
+        printWM = result.watermark;
+      }
+      addTextWatermark(dataUrl, printWM, function(watermarkedImage) {
+        openEditorPage(watermarkedImage);
+      });
+    });
   });
+}
+
+function addTextWatermark(imageSrc, watermarkText, callback) {
+  const image = new Image();
+  image.crossOrigin = "Anonymous"; // Enable cross-origin access to the image
+
+  image.onload = function() {
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, 0);
+
+    const fontSize = Math.floor(image.width / 65);
+    const fontFamily = 'Arial';
+    ctx.font = `${fontSize}px ${fontFamily}`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+
+    const textX = image.width - 10; // Adjust the X position for padding from the right edge
+    const textY = image.height - 10; // Adjust the Y position for padding from the bottom edge
+    ctx.fillText(watermarkText, textX, textY);
+
+    const watermarkedImage = canvas.toDataURL('image/png');
+    callback(watermarkedImage);
+  };
+
+  image.src = imageSrc;
 }
 
 function openEditorPage(dataUrl) {
