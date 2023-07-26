@@ -15,8 +15,9 @@ async function createUser(settings_data, albumID) {
         apikey: API_KEY,
       },
       body: JSON.stringify(settings_data),
-    }).then((res=>{
-      if(res.code === "23505"){
+    }).then((res => {
+      if (res.code === "23505") {
+        updateDataByEmail(settings_data);
         alert("This Email is already exist !")
         // Now we can get user data from here
       } else {
@@ -25,9 +26,9 @@ async function createUser(settings_data, albumID) {
           'watermark_name': settings_data.watermark_name,
           'album_name': settings_data.album_name,
           'album_id': albumID
-          }, function() {
+        }, function () {
           alert('Settings saved');
-      });
+        });
       }
     }));
 
@@ -68,31 +69,100 @@ export async function getUsers() {
 
 // Function to create a new album (gallery)
 export function createAlbum(settings_data) {
-  const apiUrl = "https://api.imgur.com/3/album"; // API endpoint to create an album
-  const headers = {
-    Authorization: `Client-ID ${settings_data.clientID}`,
-  };
-  const formData = new FormData();
-  formData.append("title", settings_data.album_name);
-  formData.append("description", settings_data.album_desc);
-
-  return fetch(apiUrl, {
-    method: "POST",
-    headers: headers,
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        createUser(settings_data, data.data.id);
-        // return data.data.id; // Return the album ID of the newly created album
+  // Check email is exist or not
+  checkEmailExists(settings_data.user_email)
+    .then((emailExists) => {
+      if (emailExists) {
+        alert("This Email is already exist !");
+        updateDataByEmail(settings_data);
       } else {
-        console.error("Failed to create album:", data);
-        return null;
+        const apiUrl = "https://api.imgur.com/3/album"; // API endpoint to create an album
+        const headers = {
+          Authorization: `Client-ID ${settings_data.clientID}`,
+        };
+        const formData = new FormData();
+        formData.append("title", settings_data.album_name);
+        formData.append("description", settings_data.album_desc);
+
+        return fetch(apiUrl, {
+          method: "POST",
+          headers: headers,
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              createUser(settings_data, data.data.id);
+              // return data.data.id; // Return the album ID of the newly created album
+            } else {
+              console.error("Failed to create album:", data);
+              return null;
+            }
+          })
+          .catch((error) => {
+            console.error("An error occurred while creating the album:", error);
+            return null;
+          });
       }
-    })
-    .catch((error) => {
-      console.error("An error occurred while creating the album:", error);
-      return null;
     });
+}
+
+async function checkEmailExists(email) {
+  try {
+    const response = await fetch(`${API_URL}?${'user_email'}=eq.${encodeURIComponent(email)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': API_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Request failed');
+    }
+
+    const responseData = await response.json();
+    const emailExists = responseData.length > 0;
+
+    return emailExists;
+  } catch (error) {
+    console.error('Error checking email existence:', error);
+    return false;
+  }
+}
+
+async function updateDataByEmail(settings_data) {
+  try {
+    const response = await fetch(`${API_URL}?${'user_email'}=eq.${encodeURIComponent(settings_data.user_email)}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_API_KEY,
+        'Authorization': `Bearer ${SUPABASE_AUTH_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify({
+        'watermark_name': settings_data.watermark_name,
+        'album_name': settings_data.album_name,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Update failed');
+    }
+
+    // Handle cases where the response body is empty
+    const responseData = await response.text();
+    const parsedResponse = responseData ? JSON.parse(responseData) : null;
+
+    if (parsedResponse === null) {
+      console.log('Data updated successfully.');
+    } else {
+      console.log('Data updated successfully:', parsedResponse);
+    }
+
+    return parsedResponse;
+  } catch (error) {
+    console.error('Error updating data:', error);
+  }
 }
