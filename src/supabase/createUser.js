@@ -132,18 +132,17 @@ async function checkEmailExists(email) {
 }
 
 async function updateDataByEmail(settings_data) {
+  console.log(settings_data)
   try {
     const response = await fetch(`${API_URL}?${'user_email'}=eq.${encodeURIComponent(settings_data.user_email)}`, {
       method: 'PATCH',
       headers: {
-        'apikey': SUPABASE_API_KEY,
-        'Authorization': `Bearer ${SUPABASE_AUTH_TOKEN}`,
         'Content-Type': 'application/json',
-        'Prefer': 'return=minimal',
+        'apikey': API_KEY,
       },
       body: JSON.stringify({
-        'watermark_name': settings_data.watermark_name,
-        'album_name': settings_data.album_name,
+        ['watermark_name']: settings_data.watermark_name,
+        ['album_name']: settings_data.album_name,
       }),
     });
 
@@ -151,16 +150,11 @@ async function updateDataByEmail(settings_data) {
       throw new Error('Update failed');
     }
 
-    // Handle cases where the response body is empty
+    // Check if the response contains JSON data before parsing it
     const responseData = await response.text();
     const parsedResponse = responseData ? JSON.parse(responseData) : null;
 
-    if (parsedResponse === null) {
-      console.log('Data updated successfully.');
-    } else {
-      console.log('Data updated successfully:', parsedResponse);
-    }
-
+    console.log('Data updated successfully:', parsedResponse);
     return parsedResponse;
   } catch (error) {
     console.error('Error updating data:', error);
