@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const API_URL = 'https://jqamqmqvaprltjzxvpap.supabase.co/rest/v1/Albums';
+        const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxYW1xbXF2YXBybHRqenh2cGFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTAzOTA1MTgsImV4cCI6MjAwNTk2NjUxOH0.5mAc-DzsfmYienAyxjLeOUie58Nbm6aC-rCky8sRhTc';
+
+// Function to insert data
+async function insertData(data) {
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': API_KEY,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Insertion failed');
+    }
+
+    const responseData = await response.json();
+    console.log('Data inserted successfully:', responseData);
+    return responseData;
+  } catch (error) {
+    console.error('Error inserting data:', error);
+  }
+}
+
+// Function to get data
+async function getData() {
+  try {
+    const response = await fetch(API_URL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': API_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Fetching data failed');
+    }
+
+    const responseData = await response.json();
+    console.log('Data fetched successfully:', responseData);
+    return responseData;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
+// Example usage:
+const newAlbum = {
+    user_email: 'email2@mail.com',
+    album_id: '15346184',
+    album_name: "Akash 2",
+};
+
+// Insert data
+insertData(newAlbum);
+
+// Get data
+// getData();
+
+    </script>
+</body>
+</html>
