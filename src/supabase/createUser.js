@@ -132,17 +132,19 @@ async function checkEmailExists(email) {
 }
 
 async function updateDataByEmail(settings_data) {
-  console.log(settings_data)
+
+
   try {
-    const response = await fetch(`${API_URL}?${'user_email'}=eq.${encodeURIComponent(settings_data.user_email)}`, {
+    const response = await fetch(`${API_URL}?user_email=eq.${encodeURIComponent(settings_data.user_email)}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'apikey': API_KEY,
+        'Prefer': 'return=minimal',
       },
       body: JSON.stringify({
-        ['watermark_name']: settings_data.watermark_name,
-        ['album_name']: settings_data.album_name,
+        'watermark_name': settings_data.watermark_name,
+        'album_name': settings_data.album_name,
       }),
     });
 
@@ -155,6 +157,14 @@ async function updateDataByEmail(settings_data) {
     const parsedResponse = responseData ? JSON.parse(responseData) : null;
 
     console.log('Data updated successfully:', parsedResponse);
+
+    chrome.storage.sync.set({
+      'watermark_name': settings_data.watermark_name,
+      'album_name': settings_data.album_name,
+    }, function () {
+      // alert('Settings saved');
+    });
+
     return parsedResponse;
   } catch (error) {
     console.error('Error updating data:', error);
