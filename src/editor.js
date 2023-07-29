@@ -1,3 +1,4 @@
+import { uploadImage } from "./uploadProcess.js";
 // Disable page reload prompt
 chrome.storage.local.get(["image"]).then((result) => {
     if (result.image) {
@@ -7,7 +8,7 @@ chrome.storage.local.get(["image"]).then((result) => {
             document.getElementById('canvasContainer').appendChild(image);
         };
         image.src = result.image;
-        uploadImage(result);
+        uploadImage('imgur', result);
     } else {
         document.getElementById('qs-heading').innerHTML = '<h2>Oops! Image not found.</h2>';
         document.getElementById('editor-tools-sec').style.display = 'none';

@@ -3,7 +3,7 @@ const API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxYW1xbXF2YXBybHRqenh2cGFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTAzOTA1MTgsImV4cCI6MjAwNTk2NjUxOH0.5mAc-DzsfmYienAyxjLeOUie58Nbm6aC-rCky8sRhTc";
 
 // Create User
-async function createUser(settings_data, albumID) {
+async function createUser(settings_data, albumID, albumHash) {
   delete settings_data.album_desc;
   delete settings_data.clientID;
   settings_data.album_id = albumID;
@@ -25,6 +25,7 @@ async function createUser(settings_data, albumID) {
           'user_email': settings_data.user_email,
           'watermark_name': settings_data.watermark_name,
           'album_name': settings_data.album_name,
+          'album_delete_hash': albumHash,
           'album_id': albumID
         }, function () {
           alert('Settings saved');
@@ -32,13 +33,14 @@ async function createUser(settings_data, albumID) {
       }
     }));
 
-    if (!response.ok) {
-      throw new Error("Insertion failed");
-    }
+    // if (!response.ok) {
+    //   throw new Error("Insertion failed");
+    // }
 
-    const responseData = await response.json();
-    console.log("Data inserted successfully:", responseData);
-    return responseData;
+    // const responseData = await response.json();
+    // console.log("Data inserted successfully:", responseData);
+    console.log(response, 'response')
+    return response;
   } catch (error) {
     console.error("Error inserting data:", error);
   }
@@ -92,7 +94,8 @@ export function createAlbum(settings_data) {
           .then((response) => response.json())
           .then((data) => {
             if (data.success) {
-              createUser(settings_data, data.data.id);
+              console.log(data.data.deletehash, 'data.data.deletehash')
+              createUser(settings_data, data.data.id, data.data.deletehash);
               // return data.data.id; // Return the album ID of the newly created album
             } else {
               console.error("Failed to create album:", data);

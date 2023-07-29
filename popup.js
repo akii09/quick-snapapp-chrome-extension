@@ -22,11 +22,11 @@ function captureScreenshot() {
   // Capture the visible tab as a PNG image
   chrome.tabs.captureVisibleTab(null, { format: 'png' }, function(dataUrl) {
     // Get the watermark text from storage
-    chrome.storage.sync.get(["watermark"], function(result) {
+    chrome.storage.sync.get(["watermark_name"], function(result) {
       // Set the default watermark text if not found in storage
       let printWM = 'QuickSnap';
-      if (result.watermark) {
-        printWM = result.watermark;
+      if (result.watermark_name) {
+        printWM = result.watermark_name;
       }
 
       // Add the text watermark to the captured image

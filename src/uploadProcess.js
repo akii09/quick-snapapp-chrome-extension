@@ -1,24 +1,69 @@
-function uploadImage(imgData) {
-    processUploading(imgData);
-    return;
-    chrome.storage.local.get(["image"]).then((result) => {
-        if (result.image === imgData.image) {
-            chrome.storage.local.get(["url"]).then((img) => {
-                console.log(img, 'pp')
-                setToInputField(img.url)
-            });
-        } else {
-        }
-    });
+import { albumHash, albumID, userEmail, watermarkName, clientID } from "./storage/chrome.js";
+import { uploadImageToAlbum } from "./imgur/upload.js";
+import { dataURLtoFile } from "./utils/functions.js";
+// Uploading process
+export function uploadImage(where, imageData){
+    if(where === 'imgur') {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            const pageTitle = tabs[0].title; // Get the title of the current active tab
+            uploadImageToAlbum(albumHash, imageData, clientID, pageTitle)
+              .then((result) => {
+                if (result) {
+                  console.log('Image Uploaded:', result.imageUrl);
+                  // Handle the uploaded image URL as needed
+                } else {
+                  console.error('Failed to upload image.');
+                }
+              });
+          });
+    }
 }
-
-function processUploading(imgData) {
-    // Create a file input element dynamically
+/**
+function uploadImage(imgData) {
+      // Create a file input element dynamically
     var file = dataURLtoFile(imgData.image, "screenshot.jpg");
 
-    console.log(file, 'file')
     if (file) {
-        uploadToImgur(file);
+        chrome.storage.sync.get(["album_id"]).then((result) => {
+            if(result.album_id){
+                // uploadImageToAlbum('2aa42594970b8f4',result.album_id, file);
+                // Usage example:
+                const imageData = "data:image/png;base64, ..."; // Replace with the data URL of the image you want to upload
+                const albumHash = "wCKmBBD72EqP2Un"; // Replace with the hash of your target album
+                // {
+                //     "data": {
+                //         "id": "LeXjckM",
+                //         "deletehash": "wCKmBBD72EqP2Un"
+                //     },
+                //     "success": true,
+                //     "status": 200
+                // }
+                // Upload the image to the album without authentication
+                uploadImageToAlbum(file, albumHash).then((data) => {
+                if (data.imageUrl) {
+                        setToInputField(data.imageUrl);
+                        chrome.storage.local.set({ url: data.imageUrl }).then(() => {
+                            console.log('Image uploaded successfully:', data.imageUrl);
+                        });
+                        const imageDetails = {
+                            imageId: data.imageId,
+                            deleteHash: data.deleteHash
+                        };
+                        // Store the image details in chrome.storage.local
+                        chrome.storage.local.set({ imageDetails: imageDetails }, function () {
+                            console.log('Image details stored successfully!');
+                        });
+                        console.log('Image uploaded successfully!');
+                    }
+                });
+                
+            } else {
+                chrome.runtime.openOptionsPage();
+                return;
+            }
+        })
+    } else {
+        alert("Opps domething went wrong!")
     }
 }
 
@@ -63,12 +108,83 @@ async function uploadToImgur(file) {
             } else {
                 console.log('Image upload failed.');
             }
-        })
-            .catch(error => {
-                console.error('Error uploading image:', error);
-            });
+        }).catch(error => {
+            console.error('Error uploading image:', error);
+        });
     });
 }
+
+// Upload in album
+function uploadImageToAlbum(imageData, albumHash) {
+    const apiUrl = `https://api.imgur.com/3/album/${albumHash}/add`;
+  
+    const formData = new FormData();
+    formData.append("image", imageData);
+  
+    return fetch(apiUrl, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          return {
+            imageId: data.data.id,
+            deleteHash: data.data.deletehash,
+            imageUrl: data.data.link // Return the direct URL of the uploaded image
+          } 
+        } else {
+          console.error("Failed to upload image to album:", data);
+          return null;
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred while uploading image to album:", error);
+        return null;
+      });
+  }
+
+function uploadImageToAlbum(clientId, albumId, imageFile) {
+    const apiUrl = `https://api.imgur.com/3/image`; // API endpoint to upload an image
+    const headers = {
+      Authorization: `Client-ID ${clientId}`,
+    };
+    const formData = new FormData();
+    formData.append("album", albumId);
+    formData.append("image", imageFile);
+  
+    return fetch(apiUrl, {
+      method: "POST",
+      headers: headers,
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+            const imageUrl = data.data.link;
+            setToInputField(imageUrl);
+            chrome.storage.local.set({ url: imageUrl }).then(() => {
+                console.log('Image uploaded successfully:', imageUrl);
+            });
+            const imageDetails = {
+                imageId: data.data.id,
+                deleteHash: data.data.deletehash
+            };
+            // Store the image details in chrome.storage.local
+            chrome.storage.local.set({ imageDetails: imageDetails }, function () {
+                console.log('Image details stored successfully!');
+            });
+            console.log('Image uploaded successfully!');
+        } else {
+          console.error("Failed to upload image to album:", data);
+          return null;
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred while uploading the image:", error);
+        return null;
+      });
+  }
 
 
 function dataURLtoFile(dataURL, fileName) {
@@ -115,3 +231,5 @@ copy.addEventListener('click', function (e) {
         answer.innerHTML = '';
     }, 2500);
 });
+
+**/
