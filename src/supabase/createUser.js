@@ -29,6 +29,7 @@ async function createUser(settings_data, albumID, albumHash) {
           'album_id': albumID
         }, function () {
           alert('Settings saved');
+          window.location.reload();
         });
       }
     }));
@@ -126,7 +127,17 @@ async function checkEmailExists(email) {
 
     const responseData = await response.json();
     const emailExists = responseData.length > 0;
-
+    // Update settings
+    chrome.storage.sync.set({
+      'user_email': responseData[0].user_email,
+      'watermark_name': responseData[0].watermark_name,
+      'album_name': responseData[0].album_name,
+      'album_id': responseData[0].album_id
+    }, function () {
+      alert('Settings updated');
+      window.location.reload();
+    });
+    console.log(responseData, 'responseDataresponseData ')
     return emailExists;
   } catch (error) {
     console.error('Error checking email existence:', error);

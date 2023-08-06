@@ -7,10 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function loadSettings() {
     // Get the stored settings and populate the input fields
-    chrome.storage.sync.get(['user_email', 'watermark_name', 'album_name'], function(items) {
+    chrome.storage.sync.get(['user_email', 'watermark_name', 'album_name', 'album_id'], function(items) {
       document.getElementById('user_email').value = items.user_email || '';
       document.getElementById('watermark_name').value = items.watermark_name || '';
       document.getElementById('album_name').value = items.album_name || '';
+      document.getElementById('token').value = items.album_id || 'NA';
     });
   }
   
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
       album_name) {
         // Create user in Supabase
         const settings_data = {
-          clientID: '2aa42594970b8f4',
+          clientID: '592d7cf9cad8076',
           album_name,
           watermark_name,
           user_email,

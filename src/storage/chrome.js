@@ -27,4 +27,4 @@ export const albumHash = await getAlbumHash();
 export const userEmail = await getUserEmail();
 export const watermarkName = await getWatermarkName();
 console.log(albumHash,albumID,watermarkName, 'albumHash')
-export const clientID = '2aa42594970b8f4';
+export const clientID = '592d7cf9cad8076';

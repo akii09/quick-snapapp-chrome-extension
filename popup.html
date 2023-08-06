@@ -3,42 +3,7 @@
 <head>
   <title>Screenshot Extension</title>
   <script src="popup.js"></script>
-  <style>
-    #settingsIcon {
-      /* position: absolute; */
-      bottom: 10px;
-      right: 10px;
-      cursor: pointer;
-    }
-    .qs-footer{
-      display: flex;
-      align-items: center;
-    }
-    .qs-sec{
-      width: 350px;
-    }
-    .qs-center{
-      padding: 15px 0;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-evenly;
-      /* align-items: center; */
-    }
-    .qs-header{
-      padding: 0 18px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-bottom: 1px solid #dad7d7;
-    }
-    .qs-header h1{
-      font-size: 22px;
-      margin-left: 5px;
-      color: #80B4FB;
-      -webkit-text-stroke: 0.7px black;
-    }
-  </style>
+  <link rel="stylesheet" href="./styles/popup.css">
 </head>
 <body>
  <div class="qs-sec">
@@ -55,6 +20,8 @@
   <div class="qs-footer">
     <img width="25px" id="settingsIcon" style="margin: 5px; cursor: pointer;" src="./images/gear.png" alt="settings" srcset="">
     <!-- <img width="25px" style="margin: 5px; cursor: pointer;" src="./images/expand.png" alt="crop" srcset=""> -->
+    <button id="openDashboard" class="button-10" role="button">Dashboard</button>
+
   </div>
  </div>
 </body>

@@ -2,12 +2,16 @@ document.addEventListener('DOMContentLoaded', function() {
   // Add click event listeners to the capture button and settings icon
   document.getElementById('captureBtn').addEventListener('click', captureScreenshot);
   document.getElementById('settingsIcon').addEventListener('click', openOptionsPage);
+  document.getElementById('openDashboard').addEventListener('click', openDashboardPage);
 });
 
 // Open options page
 function openOptionsPage() {
   // Open the options page using the Chrome runtime API
   chrome.runtime.openOptionsPage();
+}
+function openDashboardPage() {
+  window.open("https://quicksnap-5a79a.web.app/", "_blank");
 }
 
 function captureScreenshot() {
