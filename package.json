@@ -8,8 +8,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "imagekit-javascript": "^1.5.5"
-  }
+  "license": "ISC"
 }
