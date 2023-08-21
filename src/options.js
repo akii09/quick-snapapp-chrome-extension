@@ -22,17 +22,26 @@ document.addEventListener('DOMContentLoaded', function() {
     var album_name = document.getElementById('album_name').value;
     if(user_email &&
       album_name) {
-        // Create user in Supabase
-        const settings_data = {
-          clientID: '592d7cf9cad8076',
-          album_name,
-          watermark_name,
-          user_email,
-          album_desc: 'Created by QuickSnap Chrome Extension'
+        if(validEmail(user_email)) {
+           // Create user in Supabase
+          const settings_data = {
+            clientID: '592d7cf9cad8076',
+            album_name,
+            watermark_name,
+            user_email,
+            album_desc: 'Created by QuickSnap Chrome Extension'
+          }
+          createAlbum(settings_data);
+          // Save the settings to storage
+        } else {
+          alert('Please enter valid email');
         }
-        createAlbum(settings_data);
-        // Save the settings to storage
       } else {
         alert('Please enter required fields');
       }
   }
+
+function validEmail(email){
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  return emailPattern.test(email);
+}

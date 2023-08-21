@@ -11,7 +11,7 @@ function openOptionsPage() {
   chrome.runtime.openOptionsPage();
 }
 function openDashboardPage() {
-  window.open("https://quicksnapp.akashpise.tech/login/", "_blank");
+  window.open("https://quicksnap.akashpise.tech/login/", "_blank");
 }
 
 function captureScreenshot() {
