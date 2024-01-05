@@ -1,3 +1,5 @@
+import { albumHash, clientID } from "./storage/chrome.js";
+
 var deleteBtn = document.getElementById("deleteBtn");
 deleteBtn.addEventListener('click', function (e) {
   proceedDeleteImage();
@@ -9,21 +11,7 @@ function proceedDeleteImage() {
     console.log(result, 'imageDetails')
     if (result.imageDetails) {
       const { imageId, deleteHash } = result.imageDetails;
-      // Call the deleteImage function with the retrieved image details
-      let apiKey;
-      let clientId;
-      chrome.storage.sync.get(["apiKey", "clientID"]).then((result) => {
-
-        if (result.apiKey && result.clientID) {
-          apiKey = result.apiKey;
-          clientId = result.clientID;
-        } else {
-          chrome.runtime.openOptionsPage();
-          return;
-        }
-      }).then(() => {
-        deleteImage(imageId, deleteHash, clientId, apiKey);
-      })
+      deleteImage(imageId, deleteHash);
     } else {
       console.log('No image details found.');
     }
@@ -31,16 +19,17 @@ function proceedDeleteImage() {
 }
 
 // Delete function using Imgur API
-function deleteImage(imageId, deleteHash, clientId, apiKey) {
-  const apiUrl = `${apiKey}/${deleteHash}`;
+function deleteImage(imageId, deleteHash) {
+  const apiUrl = `https://api.imgur.com/3/image/${deleteHash}`;
+  console.log(clientID, 'clientID')
   const headers = {
-    Authorization: `Client-ID ${clientId}`
+    Authorization: `Client-ID ${clientID}`
   };
 
   fetch(apiUrl, {
     method: 'DELETE',
     headers: {
-      Authorization: `Client-ID ${clientId}`
+      Authorization: `Client-ID ${clientID}`
     }
   })
     .then(response => response.json())
@@ -65,4 +54,10 @@ function deleteImage(imageId, deleteHash, clientId, apiKey) {
     .catch(error => {
       console.error('An error occurred during image deletion:', error);
     });
+}
+
+document.querySelector('.openDashboard').addEventListener('click', openDashboardPage);
+
+function openDashboardPage() {
+  window.open("https://quicksnap.akashpise.tech/login/", "_blank");
 }

@@ -29,6 +29,8 @@ export function uploadImage(where, imageData){
 }
 function setToInputField(url) {
     document.getElementById('urlInp').setAttribute('value', url);
+    var deleteBtn = document.getElementById("deleteBtn");
+    deleteBtn.style.display = 'block';
 }
 
 var urlInp = document.getElementById("urlInp");

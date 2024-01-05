@@ -63,6 +63,37 @@
       background-color: rgb(222, 94, 94) !important;
       color: white !important;
     }
+    #deleteBtn{
+      display: none;
+    }
+    .dashboard-btn{
+      background-color: #007bff;
+      color: white !important;
+    }
+    .button-10 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 14px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    border-radius: 6px;
+    border: none;
+
+    color: #fff;
+    background: linear-gradient(180deg, #80B4FB 0%, #5795eb 100%);
+    background-origin: border-box;
+    box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    margin-left: 15px;
+    cursor: pointer;
+    }
+
+    .button-10:focus {
+    box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+    outline: 0;
+    }
   </style>
 </head>
 <body>
@@ -77,12 +108,13 @@
         <button class="editor-item editor-btn" id="copyUrl">Copy URL</button>
         <button class="editor-item editor-btn delete-btn" id="deleteBtn">Delete Image</button>
       </div>
+      <button class="openDashboard button-10" class="editor-item editor-btn dashboard-btn" id="checkDash">Dashboard</button>
     </div>
   </div>
 
   <!-- <script src="../src/toastify.min.js"></script> -->
   <script type="module" src="../src/editor.js"></script>
   <!-- <script src="../src/uploadProcess.js"></script> -->
-  <script src="../src/deleteProcess.js"></script>
+  <script src="../src/deleteProcess.js" type="module"></script>
 </body>
 </html>
