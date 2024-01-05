@@ -3,6 +3,19 @@ import { createAlbum } from "./supabase/createUser.js";
 document.addEventListener('DOMContentLoaded', function() {
     loadSettings();
     document.getElementById('saveBtn').addEventListener('click', saveSettings);
+    // Check user account is created or not
+    chrome.storage.sync.get(["user_email"]).then((result) => {
+      if (!result.user_email) {
+        const alertElement = document.getElementById('alert');
+        if (alertElement) {
+          alertElement.style.display = 'block';
+          // Hide the alert after 5 seconds
+          setTimeout(function() {
+            alertElement.style.display = 'none';
+          }, 5000);
+        }
+      }
+    });
   });
   
   function loadSettings() {

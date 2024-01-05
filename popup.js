@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Add click event listeners to the capture button and settings icon
   document.getElementById('captureBtn').addEventListener('click', captureScreenshot);
+  // document.getElementById('selectBtn').addEventListener('click', captureAreaScreenshot);
   document.getElementById('settingsIcon').addEventListener('click', openOptionsPage);
   document.getElementById('openDashboard').addEventListener('click', openDashboardPage);
 });
@@ -15,6 +16,24 @@ function openDashboardPage() {
 }
 
 function captureScreenshot() {
+  // First check user had created an account or not
+  chrome.storage.sync.get(["user_email"]).then((result) => {
+    if (result.user_email) {
+      // User has created an account
+      // Capture the visible tab as a PNG image
+      captureVisibleTab();
+    } else {
+      // User has not created an account
+      // Open the options page to let the user create an account
+      openOptionsPage();
+      const alertElement = document.getElementById('alert');
+      if (alertElement) {
+        alertElement.style.display = 'block';
+      }
+      return;
+    }
+  });
+
   // Remove the previously stored image and URL from local storage
   chrome.storage.local.remove(["image", "url"], function() {
     var error = chrome.runtime.lastError;
@@ -22,7 +41,6 @@ function captureScreenshot() {
       console.error(error);
     }
   });
-
   // Capture the visible tab as a PNG image
   chrome.tabs.captureVisibleTab(null, { format: 'png' }, function(dataUrl) {
     // Get the watermark text from storage
@@ -32,7 +50,6 @@ function captureScreenshot() {
       if (result.watermark_name) {
         printWM = result.watermark_name;
       }
-
       // Add the text watermark to the captured image
       addTextWatermark(dataUrl, printWM, function(watermarkedImage) {
         // Open the editor page with the watermarked image
@@ -87,3 +104,109 @@ function openEditorPage(dataUrl) {
     });
   });
 }
+
+  // Selected area
+
+  function captureAreaScreenshot() {
+    // Remove the previously stored image and URL from local storage
+    chrome.storage.local.remove(["image", "url"], function() {
+      var error = chrome.runtime.lastError;
+      if (error) {
+        console.error(error);
+      }
+    });
+  
+    // Inject a content script into the current tab to handle the area selection
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      var tab = tabs[0];
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        function: startAreaSelection
+      });
+    });
+  }
+  
+  function startAreaSelection() {
+    var selection = document.createElement("div");
+    selection.style.position = "absolute";
+    selection.style.border = "2px solid red";
+    selection.style.background = "rgba(255, 0, 0, 0.2)";
+    document.body.appendChild(selection);
+  
+    var startX, startY;
+  
+    document.addEventListener("mousedown", function(e) {
+      startX = e.clientX;
+      startY = e.clientY;
+  
+      selection.style.left = startX + "px";
+      selection.style.top = startY + "px";
+      selection.style.width = "0";
+      selection.style.height = "0";
+      selection.style.display = "block";
+    });
+  
+    document.addEventListener("mousemove", function(e) {
+      if (startX === undefined || startY === undefined) return;
+  
+      var currentX = e.clientX;
+      var currentY = e.clientY;
+  
+      var width = currentX - startX;
+      var height = currentY - startY;
+  
+      selection.style.width = width + "px";
+      selection.style.height = height + "px";
+    });
+  
+    document.addEventListener("mouseup", function(e) {
+      var endX = e.clientX;
+      var endY = e.clientY;
+  
+      var left = Math.min(startX, endX);
+      var top = Math.min(startY, endY);
+      var width = Math.abs(endX - startX);
+      var height = Math.abs(endY - startY);
+  
+      captureSelectedArea(left, top, width, height);
+    });
+  
+    function captureSelectedArea(left, top, width, height) {
+      // Capture the selected area as a PNG image
+      chrome.scripting.captureVisibleTab(null, { format: 'png' }, function(dataUrl) {
+        // Crop the captured image to the selected area
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        var ctx = canvas.getContext('2d');
+  
+        var image = new Image();
+        image.src = dataUrl;
+        image.onload = function() {
+          ctx.drawImage(image, left, top, width, height, 0, 0, width, height);
+  
+          // Convert the cropped area to a data URL (PNG format)
+          var croppedDataUrl = canvas.toDataURL('image/png');
+  
+          // Remove the selection div from the page
+          selection.remove();
+  
+          // Get the watermark text from storage
+          chrome.storage.sync.get(["watermark_name"], function(result) {
+            // Set the default watermark text if not found in storage
+            let printWM = 'QuickSnap';
+            if (result.watermark_name) {
+              printWM = result.watermark_name;
+            }
+  
+            // Add the text watermark to the captured image
+            addTextWatermark(croppedDataUrl, printWM, function(watermarkedImage) {
+              // Open the editor page with the watermarked image
+              openEditorPage(watermarkedImage);
+            });
+          });
+        };
+      });
+    }
+  }
+

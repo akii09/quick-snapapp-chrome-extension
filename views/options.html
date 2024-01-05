@@ -71,11 +71,29 @@
     .text-red{
       color: red;
     }
+    .alert{
+      display: none;
+    }
+    .alert-danger{
+      background-color: #e48780;
+      color: white;
+      padding: 6px 10px;
+      margin-bottom: 15px;
+      text-align: center;
+      border-radius: 8px;
+    }
+    .alert-text{
+      font-size: 16px;
+    }
   </style>
   <script type="module" src="../src/options.js"></script>
 </head>
 <body>
   <div class="container">
+    <!-- Show warning alert -->
+    <div id="alert" class="alert alert-danger" role="alert">
+      <p class="alert-text"> Please setup account first </p>
+    </div>
     <div class="qs-header">
       <img width="28px" src="../images/screenshot.png" alt="Q" srcset="">
       <h1> QuickSnap </h1>
